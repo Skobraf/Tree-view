@@ -20,17 +20,40 @@ class Comment extends React.Component {
 		}
 		this.props.handlClick(textRef, id, index, json);
 	}
+		getValues = () => {
+		const textRef = this.textRef.current.value;
+		const id = this.props.Json["id"]
+		const index = this.props.id;
+		const json = {
+			statusRef: this.statusRef.current.value,
+			textRef: this.textRef.current.value,
+			valueRef:this.valueRef.current.value
+		}
+		this.props.getValues(textRef, id, index, json);
+	}
+
 	toggleVisibility = () => {
 		if (this.statusRef.current.value ==="array" || this.statusRef.current.value ==="structure" ) {
 			this.visible = true;
 		}
 		else this.visible = false;
 		
-		console.log(this.visible);
 	}
 	
 	render() {
 		let visible = false;
+		let data;
+				if(Array.isArray(this.props.Json.dataType)) {
+					data	 = 	this.props.Json.dataType.map((comment, i) => 
+								<Comment 
+								Json={comment}
+								key={i}
+								id={i}
+								handlClick={this.props.handlClick}
+								getValues={this.props.getValues}
+								/>
+							)
+				}
 		return (
 				<ul>
 					<li onClick={this.handleClick}>
@@ -49,14 +72,7 @@ class Comment extends React.Component {
 					</form>
 					</li>
 						<ul>
-							{this.props.Json.dataType.map((comment, i) => 
-								<Comment 
-								Json={comment}
-								key={i}
-								id={i}
-								handlClick={this.props.handlClick}
-								/>
-							)}
+							{data}
 						</ul>
 				</ul>
 			)
