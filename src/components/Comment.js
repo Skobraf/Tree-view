@@ -20,7 +20,8 @@ class Comment extends React.Component {
 		}
 		this.props.handlClick(textRef, id, index, json);
 	}
-		getValues = () => {
+		getValues = (e) => {
+			e.preventDefault();
 		const textRef = this.textRef.current.value;
 		const id = this.props.Json["id"]
 		const index = this.props.id;
@@ -55,8 +56,9 @@ class Comment extends React.Component {
 								<option value="array">Array</option>
 								<option value="date">Date</option>
 							</select>
-							<input type="text" placeholder="Value" ref={this.valueRef} onChange={this.getValues} style={{display: !this.props.visible ? 'inline-block' : 'none'}} />
-							<button  type="submit" style={{display: this.visible ? 'inline-block' : 'none'}} onClick={this.handlClick} >add</button>
+							<input type="text" placeholder="Value" ref={this.valueRef}  style={{display: this.visible ? 'none' : 'inline-block'}} />
+							<button  type="submit" style={{display: this.visible ? 'inline-block' : 'none'}} onClick={this.handlClick} >Add</button>
+							<button onClick={this.getValues} style={{display: this.visible ? 'none' : 'inline-block'}} >Submit</button>
 					</form>
 					</li>
 						<ul>
