@@ -1,30 +1,78 @@
 import React from 'react';
 
 class Comment extends React.Component {
-	//{this.props.Json['comments'].map((comment, i) => 
-	//							<Comment 
-	//							Json={comment}
-	//							key={i}
-	//							id={i}
-	//							handlClick={this.props.handlClick}
-	//							getValues={this.props.getValues}
-	//							/>
-	//						)}
+	statusRef = React.createRef();
+	textRef = React.createRef();
+	valueRef = React.createRef();
+
 	handleClick = () => {
-		console.log(this.props.json)
+		this.setState({visible: false})
 	}
+	handlClick = (e) => {
+		e.preventDefault();
+		const textRef = this.textRef.current.value;
+		const id = this.props.Json["id"]
+		const index = this.props.id;
+		const json = {
+			statusRef: this.statusRef.current.value,
+			textRef: this.textRef.current.value,
+			valueRef:this.valueRef.current.value
+		}
+		this.props.handlClick(textRef, id, index, json);
+	}
+		getValues = () => {
+		const textRef = this.textRef.current.value;
+		const id = this.props.Json["id"]
+		const index = this.props.id;
+		const json = {
+			statusRef: this.statusRef.current.value,
+			textRef: this.textRef.current.value,
+			valueRef:this.valueRef.current.value
+		}
+		this.props.getValues(textRef, id, index, json);
+	}
+	toggleVisibility = () => {
+		if (this.statusRef.current.value ==="array" || this.statusRef.current.value ==="structure" ) {
+			this.visible = true;
+		}
+		else this.visible = false;
+
+		console.log(this.visible);
+	}
+
 	render() {
 		let visible = false;
 		return (
 				<ul>
 					<li onClick={this.handleClick}>
-						
+						<form>
+							<input type="text" placeholder="Text" ref={this.textRef} />
+							<select name="valeur"  ref={this.statusRef} onChange={this.toggleVisibility}>
+								<option value="text">text</option>
+								<option value="boolean">Boolean</option>
+								<option value="number">Number</option>
+								<option value="structure">Structure</option>
+								<option value="array">Array</option>
+								<option value="date">Date</option>
+							</select>
+							<input type="text" placeholder="Value" ref={this.valueRef} onChange={this.getValues} style={{display: !this.props.visible ? 'inline-block' : 'none'}} />
+							<button  type="submit" style={{display: this.visible ? 'inline-block' : 'none'}} onClick={this.handlClick} >add</button>
+					</form>
 					</li>
 						<ul>
+							{this.props.Json.dataType.map((comment, i) => 
+								<Comment 
+								Json={comment}
+								key={i}
+								id={i}
+								handlClick={this.props.handlClick}
+								getValues={this.props.getValues}
+								/>
+							)}
 						</ul>
 				</ul>
 			)
 	}
 }
 
-export default Comment;
+export default Comment
